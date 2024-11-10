@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/aria-role */
 import React, { useState } from "react";
 
+
 function App() {
   /**
  * keep this following data as default data in agenda details as it is required for testing
@@ -19,6 +20,8 @@ function App() {
  */
 
   // your data goes here (state)
+  const [viewMode, setViewMode]= useState(false);
+
 
   // your methods goes here
 
@@ -26,8 +29,9 @@ function App() {
     <div>
       <h1 className="mx-5 mb-5">Agenda Manager</h1>
       {/* show/hide this following add agenda template */}
-      <div className="container" role="addAgenda">
-        <button className="btn btn-info" role="goToView">
+      {!viewMode ? (
+        <div className="container" role="addAgenda">
+        <button className="btn btn-info" role="goToView" onClick={()=>setViewMode(true)}>
           Click To View Agenda
         </button>
         <form>
@@ -114,9 +118,10 @@ function App() {
           <div className="card-footer">Refer the topics you added</div>
         </div>
       </div>
-      {/* show/hide this following view agenda template */}
-      <div className="container" role="viewAgenda">
-        <button className="btn btn-info" role="goToAdd">
+      )
+      :(
+        <div className="container" role="viewAgenda">
+        <button className="btn btn-info" role="goToAdd" onClick={()=> setViewMode(false)}>
           Click To Add Agenda
         </button>
         {/* iterate the agenda details to display */}
@@ -133,6 +138,10 @@ function App() {
           <div className="card-footer">{/* {description} */}</div>
         </div>
       </div>
+      )}
+      
+      {/* show/hide this following view agenda template */}
+      
     </div>
   );
 }
