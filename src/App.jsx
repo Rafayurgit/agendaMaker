@@ -20,14 +20,49 @@ function App() {
  */
 
   // your data goes here (state)
+
+  const handelTopics=(e)=>{
+    e.preventDefault();
+    if(topic.trim().length >0){
+      setTopics([...topics, topic])
+      setTopic("")
+    }
+  }
+
   const [viewMode, setViewMode]= useState(false);
 
   const [title,setTitle]= useState("")
   const [description, setDescription]= useState("")
   const [topic, setTopic]= useState("")
+  const [topics, setTopics]= useState([]);
+  const [agendas, setAgendas]= useState([
+    {
+      title: "Angular",
+      description: "Some description about the angular",
+      topics: ["Introduction", "Typescript", "Why Angular?", "Understanding Versions", "Fundamentals"]
+    },
+    {
+      title: "Vue",
+      description: "Some description about the vue",
+      topics: ["Introduction", "Javascript", "Why Vue?", "Vue Bindings", "Component Interaction"]
+    },
+  ])
 
 
   // your methods goes here
+  const handelSubmit=(e)=>{
+  e.preventDefault();
+  if(title.trim() && description.trim() && topics.length > 0 ){
+    const newAgendas ={
+    title,
+    description,
+    topics
+  }
+  setAgendas([...agendas, newAgendas])
+  setTitle("")
+  setDescription("")
+  setTopics([])
+}
 
   return (
     <div>
@@ -48,6 +83,8 @@ function App() {
               placeholder="Enter the title"
               className="form-control"
               role="inputTitle"
+              value={title}
+              onChange={(e)=>setTitle(e.target.value)}
             />
 
             <small className="text-danger" data-testid="invalidTitle" >
@@ -70,6 +107,8 @@ function App() {
               placeholder="Enter the description"
               className="form-control"
               role="inputDescription"
+              value={description}
+              onChange={(e)=>setDescription(e.target.value)}
             />
 
             <small className="text-danger" data-testid="invalidDescription">
@@ -90,6 +129,8 @@ function App() {
               placeholder="Enter the topic"
               className="form-control"
               role="inputTopic"
+              value={topic}
+              onChange={(e)=>setTopic(e.target.value)}
             />
 
             <small className="text-danger" data-testid="invalidTopic">
@@ -101,13 +142,15 @@ function App() {
             </small>
           </div>
           {/* on click should add topics and disable the button if invalid topic */}
-          <button className="btn btn-success addAlign" role="addTopicBtn">
+          <button className="btn btn-success addAlign" role="addTopicBtn" onClick={handelTopics} disabled={topic.trim().length===0}>
             + Add Topic
           </button>
           {/* on click should add agenda details and disable the button if invalid inputs */}
           <button
             className="btn btn-success submitAlign"
             role="submitAgendaBtn"
+            onClick={handelSubmit}
+            disabled={!title.trim() || !description.trim() || topics.length===0}
           >
             Submit Agenda
           </button>
@@ -121,9 +164,19 @@ function App() {
           <div className="card-header">Added Topics</div>
           <div className="card-body">
             <ul className="list-group">
-              <li className="list-group-item" role="topicList">
-                {/* topics list */}
+              {topics.length>0 ? (
+                topics.map((t, index)=>(
+                  <li key={index} className="list-group-item" role="topicList">
+                {t}
               </li>
+                ))
+              )
+              :(
+                <div className="text-danger ml-2 mt-5" data-testid="noTopicsMsg">
+      No Topics Added
+    </div>
+              )}
+              
             </ul>
           </div>
           <div className="card-footer">Refer the topics you added</div>
@@ -136,22 +189,33 @@ function App() {
           Click To Add Agenda
         </button>
         {/* iterate the agenda details to display */}
-        <div className="card my-3" role="cards">
-          <div className="card-header">{/* {title} */}</div>
+        {agendas.length>0 ? (
+        agendas.map((agendas, index)=>(
+
+        <div key={index} className="card my-3" role="cards">
+          <div className="card-header">{agendas.title}</div>
           <div className="card-body">
             <ul className="list-group">
-              {/* iterate the topics to display */}
-              <li className="list-group-item">
-                {/* {topic} */}
+            {agendas.topics.map((t, index)=>(
+            <li key={index} className="list-group-item">
+                {t}
               </li>
+            ))}
+              {/* iterate the topics to display */}
+              
             </ul>
           </div>
-          <div className="card-footer">{/* {description} */}</div>
+          <div className="card-footer">{agendas.description}</div>
         </div>
+        ))
+        
+        ) 
+        : (
+        <div>No agendas available</div>
+        )}
+        
       </div>
       )}
-      
-      {/* show/hide this following view agenda template */}
       
     </div>
   );
