@@ -22,6 +22,10 @@ function App() {
   // your data goes here (state)
   const [viewMode, setViewMode]= useState(false);
 
+  const [title,setTitle]= useState("")
+  const [description, setDescription]= useState("")
+  const [topic, setTopic]= useState("")
+
 
   // your methods goes here
 
@@ -46,16 +50,20 @@ function App() {
               role="inputTitle"
             />
 
-            <small className="text-danger" data-testid="invalidTitle">
-              {/**
+            <small className="text-danger" data-testid="invalidTitle" >
+              {
+                title.trim().length===0 ? "Title is required": ""
+              /**
                * show empty string if title input is valid
                * else show 'Title is required'
-               */}
+               */
+              }
             </small>
           </div>
           <div className="my-3">
             <label className="form-label">Description</label>
-            {/* description */}
+            {/* description */
+             }
             <input
               type="text"
               name="newDescription"
@@ -65,10 +73,12 @@ function App() {
             />
 
             <small className="text-danger" data-testid="invalidDescription">
-              {/**
+              {description.trim().length===0 ? "Description is required" : ""
+              /**
                * show empty string if description input is valid
                * else show 'Title is required'
-               */}
+               */
+               }
             </small>
           </div>
           <div className="my-3 w-50">
@@ -83,7 +93,8 @@ function App() {
             />
 
             <small className="text-danger" data-testid="invalidTopic">
-              {/**
+              {topic.trim().length===0 ?  "Topic is required" : ""
+              /**
                * show empty string if topic input is valid
                * else show 'Topic is required'
                */}
